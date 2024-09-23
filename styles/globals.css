@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* :root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+} */
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+} */
+
+.curved-container {
+  border-top-right-radius: 35px;
+  border-bottom-right-radius: 35px;
+}
+
+.bg-lcolor {
+  background-color: #3c4799;
+}
+
+.bg11 {
+  background-color: #452b90;
+}
+
+.bg12 {
+  background-color: #f8b940;
+}
+
+.bg13 {
+  background-color: #222b40;
+}
+
+.bg14 {
+  background-color: #f5b740;
+}
+
+.bg15 {
+  color: #452b90;
+}
+
+.bg16 {
+  color: #f8b940;
+}
+
+.bg17 {
+  background-color: #ff0000;
+}
+
+.bg18 {
+  color: #452b90;
+}
+
+.mt12 {
+  margin-top: 74px;
+}
+
+button.rotated {
+  transform: rotate(360deg);
+  transition: transform 1s ease;
+}
+
+svg.rotated {
+  transform: rotate(360deg);
+  transition: transform 1s ease;
+}
+
+.bg20 {
+  color: rgb(20, 172, 45);
+}
+
+.rotate-animation {
+  animation: rotate 5s linear infinite; /* Adjust the duration and timing function as needed */
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

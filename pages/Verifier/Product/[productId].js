@@ -56,41 +56,6 @@ const Product = ({ productDetails: initialDetail, sessionData }) => {
     setFile(e.target.files[0]);
   };
 
-  // const handleFileUpload = async () => {
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-
-  //   try {
-  //     const response = await axios.post("/api/upload", formData);
-  //     // Handle successful file upload
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.log(error);
-  //     // Handle error
-  //   }
-  // };
-
-  // const handleFileChange = (e) => {
-  //   // Update the file property in formData with the selected file
-  //   setFormData({ ...formData, file: e.target.files[0] });
-  // };
-
-  // const handleChange = (e) => {
-  //   const { name, value, files } = e.target;
-
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: files ? files[0] : value,
-  //   }));
-  // };
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value,
-  //   }));
-  // };
 
   const [productNameError, setProductNameError] = useState("");
   const [fabricError, setFabricError] = useState("");
@@ -283,16 +248,13 @@ const Product = ({ productDetails: initialDetail, sessionData }) => {
   };
 
   const [formData, setFormData] = useState({
-    productName: initialProduct?.productName || "",
-    sareeColour: initialProduct?.sareeColour || "",
-    borderColour: initialProduct?.borderColour || "",
-    fabric: initialProduct?.fabric || "",
-    zari: initialProduct?.zari || "",
+    productName: initialProduct?.title || "",
+    sareeColour: initialProduct?.variants?.length > 0 ? initialProduct.variants[0].price : 0, // Corrected line
+    fabric: initialProduct?.productId || "",
+    zari: initialProduct?.variants?.length > 0 ? initialProduct.variants[0].price : 0, // Corrected line
     postId: initialProduct?._id || "",
-    length: "",
-    weight: "",
     verifier: verifierId,
-    zariTest: null, // Initialize with null
+    productUrl: initialProduct?.productUrl || ""
   });
 
   const handleRadioChange = (e) => {
@@ -306,7 +268,7 @@ const Product = ({ productDetails: initialDetail, sessionData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Show loading spinner
-    if (Role === "verifier" && verifierId) {
+    if (verifierId) {
       setLoading(true);
       // Update formDataToSend with the new FormData object
       try {
@@ -314,21 +276,12 @@ const Product = ({ productDetails: initialDetail, sessionData }) => {
         const newData = new FormData();
         // Append form data fields
         newData.append("productName", formData.productName);
-        newData.append("sareeColour", formData.sareeColour);
-        newData.append("borderColour", formData.borderColour);
-        newData.append("fabric", formData.fabric);
-        newData.append("zari", formData.zari);
-        newData.append("length", formData.length);
-        newData.append("weight", formData.weight);
+        newData.append("productId", formData.fabric);
+        newData.append("price", formData.zari);
+        newData.append("productUrl", formData.productUrl);
         newData.append("postId", formData.postId);
         newData.append("verifier", formData.verifier);
-
-        // Append the file
-        newData.append("file", file);
-
-        newData.append("zariTest", formData.zariTest.toString()); // Convert to string
-
-        const response = await axios.post("/api/verifier/submitData", newData);
+        const response = await axios.post("/api/verifier/shopify/submitData", newData);
         // // Handle the response as needed
         console.log(response.data);
         // Handle the response
@@ -436,10 +389,10 @@ const Product = ({ productDetails: initialDetail, sessionData }) => {
             </svg>
 
             <h1 className="font-small text-2xl">
-              Verify Saree -
+              Verify Product -
               <span className="font-medium text-2xl text-green-700">
                 {" "}
-                {product.productName}
+                {product?.title}
               </span>
             </h1>
           </div>
@@ -456,12 +409,12 @@ const Product = ({ productDetails: initialDetail, sessionData }) => {
                   required
                   name="productName"
                   maxLength={31}
-                  value={formData.productName}
+                  value={formData?.productName}
                   onChange={handleChange}
                 />
 
                 <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-gray-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                  Saree Name <span className="text-red-500">*</span>
+                  Product Name <span className="text-red-500">*</span>
                 </label>
                 {productNameError && (
                   <p className="text-red-500 text-sm">{productNameError}</p>
@@ -476,12 +429,12 @@ const Product = ({ productDetails: initialDetail, sessionData }) => {
                     required
                     name="fabric"
                     maxLength={16}
-                    value={formData.fabric}
+                    value={formData?.fabric}
                     onChange={handleChange}
                   />
 
                   <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-gray-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                    Fabric Type <span className="text-red-500">*</span>
+                    Product ID <span className="text-red-500">*</span>
                   </label>
                   {fabricError && (
                     <p className="text-red-500 text-sm">{fabricError}</p>
@@ -495,225 +448,19 @@ const Product = ({ productDetails: initialDetail, sessionData }) => {
                     required
                     name="zari"
                     maxLength={16}
-                    value={formData.zari}
+                    value={formData?.zari}
                     onChange={handleChange}
                   />
                   <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-gray-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                    Zari Type <span className="text-red-500">*</span>
+                    Price <span className="text-red-500">*</span>
                   </label>
                   {zariError && (
                     <p className="text-red-500 text-sm">{zariError}</p>
                   )}
                 </div>
               </div>
-              <div className="grid md:grid-cols-2 md:gap-6">
-                <div className="relative z-0 w-full mb-6 group">
-                  <input
-                    type="text"
-                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-gray-600 peer"
-                    placeholder=""
-                    required
-                    name="sareeColour"
-                    maxLength={11}
-                    value={formData.sareeColour}
-                    onChange={handleChange}
-                  />
-                  <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-gray-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                    Saree Color <span className="text-red-500">*</span>
-                  </label>
-                  {sareeColourError && (
-                    <p className="text-red-500 text-sm">{sareeColourError}</p>
-                  )}
-                </div>
-                <div className="relative z-0 w-full mb-6 group">
-                  <input
-                    type="text"
-                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-gray-600 peer"
-                    placeholder=""
-                    required
-                    name="borderColour"
-                    maxLength={11}
-                    value={formData.borderColour}
-                    onChange={handleChange}
-                  />
-                  <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-gray-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                    Border Color <span className="text-red-500">*</span>
-                  </label>
-                  {borderColourError && (
-                    <p className="text-red-500 text-sm">{borderColourError}</p>
-                  )}
-                </div>
-              </div>
-              <div className="grid md:grid-cols-2 md:gap-6">
-                <div className="relative z-0 w-full mb-6 group">
-                  <input
-                    type="number"
-                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-gray-600 peer"
-                    placeholder=""
-                    required
-                    name="weight"
-                    maxLength={6}
-                    value={formData.weight}
-                    onChange={handleChange}
-                  />
-                  <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-gray-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                    Weight (Kg) <span className="text-red-500">*</span>
-                  </label>
-                  {weightError && (
-                    <p className="text-red-500 text-sm">{weightError}</p>
-                  )}
-                </div>
-                <div className="relative z-0 w-full mb-6 group">
-                  <input
-                    type="number"
-                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-gray-600 peer"
-                    placeholder=""
-                    required
-                    name="length"
-                    maxLength={6}
-                    value={formData.length}
-                    onChange={handleChange}
-                  />
-                  <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-gray-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                    Length (Inches) <span className="text-red-500">*</span>
-                  </label>
-                  {lengthError && (
-                    <p className="text-red-500 text-sm">{lengthError}</p>
-                  )}
-                </div>
-              </div>
-              {/* <div>
-                <div className="relative z-0 w-full mb-6 group">
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      id="zariTestCheckbox"
-                      name="zariTest"
-                      className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
-                      checked={formData.zariTest}
-                      onChange={handleCheckboxChange}
-                      required
-                    />
-                    <label
-                      htmlFor="zariTestCheckbox"
-                      className="ms-2 text-sm font-medium text-gray-700 ">
-                      Zari Test <span className="text-red-500">*</span>
-                    </label>
-                  </div>
-                </div>
-              </div> */}
-              <div className="flex items-center mb-4">
-                <label className="text-sm font-medium text-gray-700">
-                  Zari Test
-                </label>
-                <div className="ml-4">
-                  <input
-                    type="radio"
-                    id="passRadio"
-                    name="zariTest"
-                    value="pass"
-                    checked={formData.zariTest === true}
-                    onChange={handleRadioChange}
-                    required
-                  />
-                  <label
-                    htmlFor="passRadio"
-                    className="ml-2 text-sm font-medium text-green-600">
-                    Pass
-                  </label>
-                </div>
-                <div className="ml-4">
-                  <input
-                    type="radio"
-                    id="failRadio"
-                    name="zariTest"
-                    value="fail"
-                    checked={formData.zariTest === false}
-                    onChange={handleRadioChange}
-                    required
-                  />
-                  <label
-                    htmlFor="failRadio"
-                    className="ml-2 text-sm font-medium text-red-600">
-                    Fail
-                  </label>
-                </div>
-              </div>
-              <div className="relative z-0 w-full mb-6 group">
-                <label
-                  className="block mb-2 text-sm font-medium text-gray-700"
-                  htmlFor="file_input">
-                  Upload file <span className="text-red-500">*</span>
-                </label>
-                <input
-                  className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-gray-600 peer"
-                  type="file"
-                  id="file"
-                  name="file"
-                  accept=".jpg, .jpeg, .png"
-                  required
-                  // onChange={handleChange}
-                  onChange={handleFileChange}
-                />
-                <p className="mt-1 text-sm text-gray-500" id="file_input_help">
-                  PNG, JPG or JPEG
-                </p>
-              </div>
-              {/* <div className="grid md:grid-cols-2 md:gap-6">
-                <div className="mb-6">
-                  <label
-                    htmlFor="dropzone-file"
-                    className="font-medium text-sm text-gray-500 mb-2">
-                    Your Image File <span className="text-red-500">*</span>
-                  </label>
-                  <label
-                    htmlFor="dropzone-file"
-                    className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 ">
-                    {file ? (
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <img
-                          src={URL.createObjectURL(file)}
-                          alt="File Preview"
-                          className="w-full h-1/3 mb-2"
-                        />
-                        <p className="mb-2 text-sm font-semibold">
-                          {file.name}
-                        </p>
-                        <p className="text-xs text-gray-500 ">
-                          {`File type: ${file.type}`}
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <svg
-                          className="w-8 h-8 mb-4 text-gray-500 "
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 20 16"></svg>
-                        <p className="text-sm text-gray-500 ">
-                          <span className="font-semibold">Click to upload</span>
-                        </p>
-                        <p className="text-sm text-gray-500 ">or</p>
 
-                        <p className="text-xs text-gray-500 ">SVG, PNG, JPG</p>
-                        <p className="text-xs text-gray-500 ">
-                          (MAX. 800x400px)
-                        </p>
-                      </div>
-                    )}
-                    <input
-                      id="dropzone-file"
-                      type="file"
-                      className="hidden"
-                      name="file"
-                      required
-                      accept=".jpg, .jpeg, .png"
-                      onChange={handleFileChange}
-                    />
-                  </label>
-                </div>
-              </div> */}
+
               <div className="flex justify-end gap-3">
                 <p
                   onClick={handleRejectClick}
@@ -728,15 +475,7 @@ const Product = ({ productDetails: initialDetail, sessionData }) => {
               </div>
             </form>
           </div>
-          {/* <div>
-            <input
-              type="file"
-              accept=".jpg, .jpeg, .png"
-              onChange={handleFileChange}
-            />
 
-            <button onClick={handleFileUpload}>Upload</button>
-          </div> */}
           {showRejectForm && (
             <div className="flex justify-center mb-10">
               <form

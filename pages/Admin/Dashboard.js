@@ -47,13 +47,13 @@ function Dashboard({ totalProperty, totalVerifiers }) {
                     className="flex items-center justify-between w-3/6 rounded p-3 shadow-lg bg11 transition-transform transform hover:scale-105">
                     <div className="text-2xl text-white">
                       <h4 className="text-base font-semibold mb-1.5">
-                        Total Verified Properties
+                        Total Verified Products
                       </h4>
                       <h2 className="text-2xl font-bold mb-1.5">
                         {totalCount}
                       </h2>
                       <h6 className="text-sm">
-                        Total {totalCount} properties verified
+                        Total {totalCount} Products verified
                       </h6>
                     </div>
                     <div className="mt-10 ">

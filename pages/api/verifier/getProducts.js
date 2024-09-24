@@ -1,5 +1,6 @@
 import connectDB from "@/utils/connectDB";
 import Products from "@/models/seller/Products";
+import ShopifyProducts from "@/models/ShopifyProducts";
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
@@ -8,12 +9,8 @@ export default async function handler(req, res) {
       await connectDB();
 
       // Retrieve all products from the database and populate the seller details
-      const filteredProducts = await Products.find({
-        verificationStatus: { $ne: "saved" },
-      })
-        .populate("sellerId") // Assuming 'sellerId' is the field linking to the seller collection
-        .exec();
-
+      const filteredProducts = await ShopifyProducts.find()
+      
       // Respond with the list of filtered products with seller details
       res.status(200).json(filteredProducts);
     } catch (error) {

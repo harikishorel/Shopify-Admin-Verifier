@@ -159,12 +159,12 @@ const AddVerifier = () => {
     e.preventDefault();
     setLoading(true);
 
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-    if (checkboxes.length === 0) {
-      // If no checkbox is selected, show an error message or handle it accordingly
-      alert('Please select at least one verifier type');
-      return;
-    }
+    // const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    // if (checkboxes.length === 0) {
+    //   // If no checkbox is selected, show an error message or handle it accordingly
+    //   alert('Please select at least one verifier type');
+    //   return;
+    // }
     // Step 2: Create a FormData object and append the file
     const newformData = new FormData();
     newformData.append("file", file);
@@ -175,11 +175,11 @@ const AddVerifier = () => {
     newformData.append("phone", formData.phone);
     newformData.append("idProof", formData.idProof);
     newformData.append("address", formData.address);
-    const selectedVerifierTypes = Array.from(checkboxes).map(
-      (checkbox) => checkbox.value
-    );
-    newformData.append("verifiertype", selectedVerifierTypes);
-    console.log("selectedVerifierTypes", selectedVerifierTypes)
+    // const selectedVerifierTypes = Array.from(checkboxes).map(
+    //   (checkbox) => checkbox.value
+    // );
+    // newformData.append("verifiertype", selectedVerifierTypes);
+    // console.log("selectedVerifierTypes", selectedVerifierTypes)
     try {
       // Make a POST request to the AddSeller API
       const response = await axios.post(
@@ -366,7 +366,7 @@ const AddVerifier = () => {
               </div>
               <div className="relative z-0 w-full mb-6 group">
 
-                <>
+                {/* <>
                   <h3 className="mb-4 font-medium text-sm text-gray-500">
                     Verifier Type
                   </h3>
@@ -423,7 +423,7 @@ const AddVerifier = () => {
                       </div>
                     </li>
                   </ul>
-                </>
+                </> */}
 
 
               </div>

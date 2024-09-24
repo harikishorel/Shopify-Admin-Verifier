@@ -146,7 +146,7 @@ function Sidebar({ rowCount }) {
                 </span>
               </Link>
             </li>
-
+{/* 
             <li>
               <Link
                 href="/Admin/Fee"
@@ -171,7 +171,7 @@ function Sidebar({ rowCount }) {
                   Fee
                 </span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 href="/Admin/VerifPayout"

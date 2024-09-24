@@ -355,7 +355,7 @@ const Verifier = ({
         <div className="sm:ml-64 flex flex-col mt-20 gap-8">
           <div className="flex place-content-between">
             <div>
-              <h1 className="font-medium text-2xl ml-6">Verified Properties</h1>
+              <h1 className="font-medium text-2xl ml-6">Verified Products</h1>
             </div>
           </div>
 

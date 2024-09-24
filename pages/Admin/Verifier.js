@@ -448,9 +448,9 @@ const Verifier = ({ verifiers: initialVerifiers, initialSearchTerm }) => {
                     <th scope="col" className="px-6 py-3">
                       Email
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    {/* <th scope="col" className="px-6 py-3">
                       Verifier Type
-                    </th>
+                    </th> */}
                     <th scope="col" className="px-14 py-3">
                       Status
                     </th>
@@ -500,11 +500,11 @@ const Verifier = ({ verifiers: initialVerifiers, initialSearchTerm }) => {
                           : "NA"}
                       </td>
 
-                      <td className="px-6 py-4 text-gray-900">
+                      {/* <td className="px-6 py-4 text-gray-900">
                         {user.verifiertype.map((type, index) => (
                           <div key={index}>{type}</div>
                         ))}
-                      </td>
+                      </td> */}
 
                       <td className="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                         <label

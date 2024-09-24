@@ -95,18 +95,16 @@ const VerifierSidebar = () => {
 
       <aside
         id="logo-sidebar"
-        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform pt-14 ${
-          isSidebarOpen ? "" : "-translate-x-full"
-        } sm:translate-x-0`}
+        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform pt-14 ${isSidebarOpen ? "" : "-translate-x-full"
+          } sm:translate-x-0`}
         aria-label="Sidebar">
         <div className="h-full px-3 pb-4 overflow-y-auto bg13 pt-5">
           <ul className="space-y-2 font-medium">
             <li>
               <Link
                 href="/Verifier/Dashboard"
-                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
-                  isActiveLink("/Verifier/Dashboard") ? "bg14" : ""
-                }`}>
+                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${isActiveLink("/Verifier/Dashboard") ? "bg14" : ""
+                  }`}>
                 {" "}
                 <svg
                   className="w-5 h-5 text-white transition duration-75  group-hover:text-gray-900 "
@@ -125,31 +123,20 @@ const VerifierSidebar = () => {
 
             <li>
               <Link
-                href="/Verifier/Property"
-                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
-                  isActiveLink("/Verifier/Property") ? "bg14" : ""
-                }`}>
+                href="/Verifier/Products"
+                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${isActiveLink("/Verifier/Product") ? "bg14" : ""
+                  }`}>
                 <svg
+                  className="flex-shrink-0 w-5 h-5 text-white transition duration-75  group-hover:text-gray-900 "
+                  aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="flex-shrink-0 w-5 h-5 text-white transition duration-75  group-hover:text-gray-900 ">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                  />
+                  fill="currentColor"
+                  viewBox="0 0 18 20">
+                  <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z" />
                 </svg>
 
                 <span className="flex-1 ms-3 whitespace-nowrap text-white  group-hover:text-gray-900">
-                  Properties
+                  Products
                 </span>
               </Link>
             </li>
@@ -157,9 +144,8 @@ const VerifierSidebar = () => {
             <li>
               <Link
                 href="/Verifier/Profile"
-                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
-                  isActiveLink("/Verifier/Profile") ? "bg14" : ""
-                }`}>
+                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${isActiveLink("/Verifier/Profile") ? "bg14" : ""
+                  }`}>
                 <svg
                   className="flex-shrink-0 w-5 h-5 text-white transition duration-75  group-hover:text-gray-900 "
                   aria-hidden="true"
@@ -176,9 +162,8 @@ const VerifierSidebar = () => {
             <li>
               <Link
                 href="/Verifier/Payment"
-                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${
-                  isActiveLink("/Verifier/Payment") ? "bg14" : ""
-                }`}>
+                className={`flex items-center p-2 rounded-lg hover:bg-gray-100 group ${isActiveLink("/Verifier/Payment") ? "bg14" : ""
+                  }`}>
                 <svg
                   className="flex-shrink-0 w-5 h-5 text-white transition duration-75 d group-hover:text-gray-900 "
                   xmlns="http://www.w3.org/2000/svg"
@@ -225,7 +210,7 @@ const VerifierSidebar = () => {
                 </svg>
                 <span
                   className="flex-1 ms-3 whitespace-nowrap text-white  group-hover:text-gray-900"
-                  // onClick={() => handleLogout()}
+                // onClick={() => handleLogout()}
                 >
                   Logout
                 </span>

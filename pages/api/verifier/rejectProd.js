@@ -1,6 +1,7 @@
 import connectDB from "@/utils/connectDB";
 import VerifiedProduct from "@/models/verifier/VerifierPayment";
 import Products from "@/models/seller/Products";
+import ShopifyProducts from "@/models/ShopifyProducts";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -12,7 +13,7 @@ export default async function handler(req, res) {
       const prodId = req.body.ProductId;
       const verifierId = req.body.verifierId;
       // Find the product by prodId
-      const product = await Products.findById(prodId);
+      const product = await ShopifyProducts.findById(prodId);
 
       if (!product) {
         return res.status(404).json({ error: "Product not found" });
@@ -20,7 +21,7 @@ export default async function handler(req, res) {
 
       if (!product.rejectReason) {
         // If it doesn't exist, add the "rejectReason" field dynamically
-        await Products.updateOne(
+        await ShopifyProducts.updateOne(
           { _id: prodId },
           {
             $set: {
@@ -32,7 +33,7 @@ export default async function handler(req, res) {
         );
       } else {
         // If it exists, update the "rejectReason" field
-        await Products.updateOne(
+        await ShopifyProducts.updateOne(
           { _id: prodId },
           {
             $set: {
@@ -45,22 +46,22 @@ export default async function handler(req, res) {
       }
 
       // Create a new VerifiedProduct entry with the desired values
-      const newVerification = new VerifiedProduct({
-        productId: prodId,
-        verifierId: verifierId,
-        rejectReason: reason,
-        totalAmount: 200,
-        verificationStatus: "rejected",
-        // Set other fields based on your requirements
-      });
+      // const newVerification = new VerifiedProduct({
+      //   productId: prodId,
+      //   verifierId: verifierId,
+      //   rejectReason: reason,
+      //   totalAmount: 200,
+      //   verificationStatus: "rejected",
+      //   // Set other fields based on your requirements
+      // });
 
-      // Save the new entry to the database
-      const savedVerification = await newVerification.save();
+      // // Save the new entry to the database
+      // const savedVerification = await newVerification.save();
 
       // Respond with a success message or any other relevant data
       res.status(200).json({
         message: "Product verification rejected successfully",
-        data: savedVerification,
+        // data: savedVerification,
       });
     } catch (error) {
       console.error("Error processing data:", error);

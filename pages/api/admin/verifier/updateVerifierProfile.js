@@ -36,7 +36,6 @@ export default async function handler(req, res) {
           phone,
           idProof,
           address,
-          verifiertype,
           proofimg,
         } = fields;
 
@@ -48,7 +47,7 @@ export default async function handler(req, res) {
         }
 
         // Step 2: Update Verifier fields with the fields object
-        const verifierTypesArray = verifiertype[0].split(",");
+        // const verifierTypesArray = verifiertype[0].split(",");
 
         existingVerifier.name = name[0];
         existingVerifier.email = email[0];
@@ -56,7 +55,7 @@ export default async function handler(req, res) {
         existingVerifier.phone = phone[0];
         existingVerifier.idProof = idProof[0];
         existingVerifier.address = address[0];
-        existingVerifier.verifiertype = verifierTypesArray;
+        // existingVerifier.verifiertype = verifierTypesArray;
         await existingVerifier.save();
         console.log("URLof proof", existingVerifier.proofimg);
 
@@ -81,7 +80,7 @@ export default async function handler(req, res) {
             },
           });
 
-          const adminFolderKey = `realEstate/${id}/`;
+          const adminFolderKey = `shopify/${id}/`;
 
           // Parse the URL to extract Bucket and Key
           const urlParts = new URL(existingVerifier.proofimg);

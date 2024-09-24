@@ -64,7 +64,7 @@ const AddVerifier = ({ verifier: initialVerifiers }) => {
     address: verifier.address || "",
     phone: verifier.phone || "",
     idProof: verifier.idProof || "",
-    verifiertype: verifier.verifiertype || "",
+    // verifiertype: verifier.verifiertype || "",
     proofimg: verifier.proofimg || "",
   });
 
@@ -195,14 +195,14 @@ const AddVerifier = ({ verifier: initialVerifiers }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const checkboxes = document.querySelectorAll(
-      'input[type="checkbox"]:checked'
-    );
-    if (checkboxes.length === 0) {
-      // If no checkbox is selected, show an error message or handle it accordingly
-      alert("Please select at least one verifier type");
-      return;
-    }
+    // const checkboxes = document.querySelectorAll(
+    //   'input[type="checkbox"]:checked'
+    // );
+    // if (checkboxes.length === 0) {
+    //   // If no checkbox is selected, show an error message or handle it accordingly
+    //   alert("Please select at least one verifier type");
+    //   return;
+    // }
 
     setLoading(true);
 
@@ -218,7 +218,7 @@ const AddVerifier = ({ verifier: initialVerifiers }) => {
     newformData.append("idProof", formData.idProof);
     newformData.append("address", formData.address);
     newformData.append("proofimg", formData.proofimg);
-    newformData.append("verifiertype", formData.verifiertype);
+    // newformData.append("verifiertype", formData.verifiertype);
 
     try {
       // Perform your API call to update the verifier with formData
@@ -272,7 +272,7 @@ const AddVerifier = ({ verifier: initialVerifiers }) => {
       phone: verifier.phone || "NA",
       idProof: verifier.idProof || "", // Assuming idProof is part of verifier
       proofimg: verifier.proofimg || "", // Assuming proofimg is part of verifier
-      verifiertype: verifier.verifiertype || "",
+      // verifiertype: verifier.verifiertype || "",
       proofimg: verifier.proofimg || "",
     });
   };
@@ -489,78 +489,7 @@ const AddVerifier = ({ verifier: initialVerifiers }) => {
                   )}
                 </div>
               </div>
-              <div className="relative z-0 w-full mb-6 group">
-                <>
-                  <h3 className="mb-4 font-medium text-sm text-gray-500">
-                    Verifier Type
-                  </h3>
-                  <ul className="items-center w-full text-sm font-medium text-gray-500 bg-white border border-gray-200 rounded-lg sm:flex">
-                    <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r ">
-                      <div className="flex items-center ps-3">
-                        <input
-                          id="Identity Verifier"
-                          type="checkbox"
-                          name="verifier type"
-                          value="Identity Verifier"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                          checked={formData.verifiertype.includes(
-                            "Identity Verifier"
-                          )}
-                          disabled={!editing}
-                          onChange={handleCheckboxChange}
-                        />
-                        <label
-                          htmlFor="vue-checkbox-list"
-                          className="w-full py-3 ms-2 text-sm font-medium text-gray-700 ">
-                          Identity Verifier
-                        </label>
-                      </div>
-                    </li>
-                    <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r ">
-                      <div className="flex items-center ps-3">
-                        <input
-                          id="Property Verifier"
-                          type="checkbox"
-                          name="verifier type"
-                          value="Property Verifier"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 "
-                          checked={formData.verifiertype.includes(
-                            "Property Verifier"
-                          )}
-                          disabled={!editing}
-                          onChange={handleCheckboxChange}
-                        />
-                        <label
-                          htmlFor="react-checkbox-list"
-                          className="w-full py-3 ms-2 text-sm font-medium text-gray-700">
-                          Property Verifier
-                        </label>
-                      </div>
-                    </li>
-                    <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r">
-                      <div className="flex items-center ps-3">
-                        <input
-                          id="Document Verifier"
-                          type="checkbox"
-                          name="verifier type"
-                          value="Document Verifier"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                          checked={formData.verifiertype.includes(
-                            "Document Verifier"
-                          )}
-                          disabled={!editing}
-                          onChange={handleCheckboxChange}
-                        />
-                        <label
-                          htmlFor="angular-checkbox-list"
-                          className="w-full py-3 ms-2 text-sm font-medium text-gray-700 ">
-                          Document Verifier
-                        </label>
-                      </div>
-                    </li>
-                  </ul>
-                </>
-              </div>
+            
 
               <div className="w-full sm:w-1/2 mb-5">
                 <label

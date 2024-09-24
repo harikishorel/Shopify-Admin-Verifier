@@ -278,7 +278,7 @@ const Properties = ({
             <div className="flex place-content-between">
               <div className="flex flex-row gap-2">
                 <h1 className="font-medium text-2xl ml-6">
-                  Total Verified Properties:
+                  Total Verified Products:
                 </h1>
                 <h2 className="text-2xl font-bold bg15">
                   {productDetails?.length || 0}
@@ -419,7 +419,7 @@ const Properties = ({
                         <td
                           colSpan="6"
                           className="px-6 py-4 text-center text-gray-500">
-                          No Properties found
+                          No Products found
                         </td>
                       </tr>
                     )}

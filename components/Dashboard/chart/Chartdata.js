@@ -41,7 +41,7 @@ const Chartdata = ({ monthlySales }) => {
         labels: monthNames.slice(0, lastCapturedMonth), // Slicing to only include months up to the last captured month
         datasets: [
           {
-            label: 'Verified Properties',
+            label: 'Verified Products',
             data: propertyCounts.slice(0, lastCapturedMonth), // Slicing to only include counts up to the last captured month
             borderColor: 'black',
             backgroundColor: '#452B90',
@@ -64,7 +64,7 @@ const Chartdata = ({ monthlySales }) => {
   return (
     <div className="mb-4 w-full md:w-[684px] mx-auto">
       <div className="bg-white p-6 rounded-lg shadow-xl w-full md:w-auto">
-        <h3 className="text-xl bg15 font-bold mb-2">Total Monthly verified property</h3>
+        <h3 className="text-xl bg15 font-bold mb-2">Total Monthly verified products</h3>
         <canvas ref={chartRef} width={200} height={100}></canvas>
       </div>
     </div>

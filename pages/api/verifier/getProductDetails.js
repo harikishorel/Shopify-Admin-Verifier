@@ -1,5 +1,6 @@
 import connectDB from "@/utils/connectDB";
 import Products from "@/models/seller/Products";
+import ShopifyProducts from "@/models/ShopifyProducts";
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
@@ -11,9 +12,7 @@ export default async function handler(req, res) {
       const { id } = req.query;
 
       // Retrieve product details by ID from the database and populate the seller details
-      const productDetails = await Products.findById(id)
-        .populate("sellerId")
-        .exec();
+      const productDetails = await ShopifyProducts.findById(id)
 
       // Check if the product exists
       if (!productDetails) {

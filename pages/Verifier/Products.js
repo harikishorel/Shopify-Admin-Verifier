@@ -71,9 +71,9 @@ const Table = ({
   const [searchClicked, setSearchClicked] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
   const [isRotated, setRotated] = useState(false);
-
+  console.log("Products", products)
   const submittedProducts = products.filter(
-    (product) => product.verificationStatus === "submitted"
+    (product) => product.verificationStatus === "pending"
   );
 
   // const [filteredProducts, setFilteredProducts] = useState(submittedProducts);
@@ -83,7 +83,7 @@ const Table = ({
   switch (selectedStatus) {
     case "submitted":
       displayedProducts = products.filter(
-        (product) => product.verificationStatus === "submitted"
+        (product) => product.verificationStatus === "pending"
       );
       break;
     case "approved":
@@ -236,18 +236,18 @@ const Table = ({
       ...(startPage > 1 ? [renderPageButton(1)] : []), // Show first page number
       ...(startPage > 2
         ? [
-            <span key="ellipsis-start" className="relative top-1">
-              ...
-            </span>,
-          ]
+          <span key="ellipsis-start" className="relative top-1">
+            ...
+          </span>,
+        ]
         : []),
       ...getRange(startPage, endPage).map(renderPageButton),
       ...(endPage < totalPages - 1
         ? [
-            <span key="ellipsis-end" className="relative top-1">
-              ...
-            </span>,
-          ]
+          <span key="ellipsis-end" className="relative top-1">
+            ...
+          </span>,
+        ]
         : []),
       ...(endPage < totalPages ? [renderPageButton(totalPages)] : []), // Show last page number
     ];
@@ -259,11 +259,10 @@ const Table = ({
     <button
       key={pageNumber}
       onClick={() => handlePageChange(pageNumber)}
-      className={`px-3 py-2 rounded-md ${
-        currentPage === pageNumber
-          ? " text-white border h-full bg11"
-          : " text-black h-auto hover:bg-gray-200"
-      }`}>
+      className={`px-3 py-2 rounded-md ${currentPage === pageNumber
+        ? " text-white border h-full bg11"
+        : " text-black h-auto hover:bg-gray-200"
+        }`}>
       {pageNumber}
     </button>
   );
@@ -313,12 +312,11 @@ const Table = ({
 
   return (
     <div
-      className={`bg-gray-50 flex flex-col ${
-        filteredAndPaginatedProducts.length > 3 ? "h-full" : "h-screen"
-      }`}>
+      className={`bg-gray-50 flex flex-col ${filteredAndPaginatedProducts.length > 3 ? "h-full" : "h-screen"
+        }`}>
       <VLayout>
         <div className="sm:ml-64 flex flex-col mt-20 gap-6">
-          <h1 className="font-medium text-2xl ml-6">Properties</h1>
+          <h1 className="font-medium text-2xl ml-6">Products</h1>
 
           <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between gap-1 px-8">
             <div className="flex flex-column gap-2">
@@ -355,15 +353,13 @@ const Table = ({
               </form>
               <div>
                 <button
-                  className={`mt-2 font-medium text-black outline-none opacity-50 hover:opacity-80${
-                    isRotated ? " rotated" : ""
-                  }`}
+                  className={`mt-2 font-medium text-black outline-none opacity-50 hover:opacity-80${isRotated ? " rotated" : ""
+                    }`}
                   onClick={handleReset}
                   style={{ outline: "none" }}>
                   <svg
-                    className={`w-5 h-5 text-gray-800${
-                      isRotated ? " rotated" : ""
-                    }`}
+                    className={`w-5 h-5 text-gray-800${isRotated ? " rotated" : ""
+                      }`}
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -399,18 +395,13 @@ const Table = ({
                   <tr className="text-sm dark:bg-meta-4 text-left">
                     <th className="py-2 px-4 font-medium  text-black">No</th>
                     <th className="py-2 px-4 font-medium  text-black">
-                      Property Name
+                      Product Name
                     </th>
                     <th className="py-2 px-4 font-medium  text-black">Price</th>
                     <th className="py-2 px-4 font-medium  text-black">
-                      Seller Name
+                      View Product
                     </th>
-                    <th className="py-2 px-4 font-medium  text-black">
-                      Seller Contact
-                    </th>
-                    <th className="py-2 px-4 font-medium text-black ">
-                      Status
-                    </th>
+
                     <th className="py-2 px-4 font-medium text-black">
                       Actions
                     </th>
@@ -453,28 +444,25 @@ const Table = ({
 
                         <td className="border-b border-gray-300 py-3 px-1">
                           <p
-                            className={`inline-flex capitalize rounded-full px-3 py-1 text-center text-sm font-medium ${
-                              product.verificationStatus === "verified"
-                                ? "text-green-700 bg-green-100"
-                                : product.verificationStatus === "rejected"
+                            className={`inline-flex capitalize rounded-full px-3 py-1 text-center text-sm font-medium ${product.verificationStatus === "verified"
+                              ? "text-green-700 bg-green-100"
+                              : product.verificationStatus === "rejected"
                                 ? "text-orange-700 bg-red-100"
                                 : "text-yellow-700 bg-yellow-100"
-                            }`}>
+                              }`}>
                             {product.verificationStatus}
                           </p>
                         </td>
                         <td className="border-b border-gray-300 py-3 px-4">
                           <button
                             type="button"
-                            className={`${
-                              product.verificationStatus === "verified"
-                                ? "py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-100 focus:outline-none bg-green-500 rounded-lg border border-gray-200 hover:border-green-200 hover:bg-green-300 hover:text-green-900 focus:z-10 focus:ring-4 focus:ring-green-200"
-                                : "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  focus:outline-none"
-                            } ${
-                              product.verificationStatus === "rejected"
+                            className={`${product.verificationStatus === "verified"
+                              ? "py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-100 focus:outline-none bg-green-500 rounded-lg border border-gray-200 hover:border-green-200 hover:bg-green-300 hover:text-green-900 focus:z-10 focus:ring-4 focus:ring-green-200"
+                              : "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  focus:outline-none"
+                              } ${product.verificationStatus === "rejected"
                                 ? "text-gray-300 bg-gray-700 hover:bg-gray-700 cursor-not-allowed"
                                 : ""
-                            }`}
+                              }`}
                             onClick={() =>
                               handleButtonClick(
                                 product._id,
@@ -496,7 +484,7 @@ const Table = ({
                       <td
                         colSpan="6"
                         className="px-6 py-4 text-gray-900 text-center font-semibold">
-                        No Properties Available
+                        No Products Available
                       </td>
                     </tr>
                   )}
@@ -513,11 +501,10 @@ const Table = ({
                 <div className="flex space-x-2 mt-2 rounded-md overflow-hidden border-2 border-[#D5D9D9] shadow-sm">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
-                    className={`relative flex items-center px-2 py-2 ${
-                      currentPage === 1
-                        ? "text-[#5B5C5C] cursor-not-allowed"
-                        : "text-black hover:bg-gray-200 hover:border-[#F5F6F6]"
-                    } transition-all`}
+                    className={`relative flex items-center px-2 py-2 ${currentPage === 1
+                      ? "text-[#5B5C5C] cursor-not-allowed"
+                      : "text-black hover:bg-gray-200 hover:border-[#F5F6F6]"
+                      } transition-all`}
                     style={{
                       cursor: currentPage === 1 ? "not-allowed" : "pointer",
                     }}
@@ -541,11 +528,10 @@ const Table = ({
                   {renderPageNumbers()}
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
-                    className={`relative flex items-center px-2 py-2 ${
-                      currentPage === totalPages
-                        ? "text-[#5B5C5C] cursor-not-allowed"
-                        : "text-black hover:bg-gray-200 hover:border-[#F5F6F6]"
-                    } transition-all`}
+                    className={`relative flex items-center px-2 py-2 ${currentPage === totalPages
+                      ? "text-[#5B5C5C] cursor-not-allowed"
+                      : "text-black hover:bg-gray-200 hover:border-[#F5F6F6]"
+                      } transition-all`}
                     style={{
                       cursor:
                         currentPage === totalPages ? "not-allowed" : "pointer",

@@ -18,7 +18,7 @@ export async function getServerSideProps(context) {
     const VerifierID = session?.user?.email;
     const RoleID = session?.user?.image;
     const Property = await axios.get(
-      `${URL}/api/verifier/realEstate/getProperty`,
+      `${URL}/api/verifier/getProducts`,
       {
         params: {
           searchTerm: context.query.searchTerm || "",
@@ -27,19 +27,19 @@ export async function getServerSideProps(context) {
       }
     );
 
-    const PriceData = await axios.get(
-      `${URL}/api/verifier/realEstate/getPrice?id=${VerifierID}`
-    );
-    const verifiedProperty = await axios.get(
-      `${URL}/api/verifier/realEstate/getPaymentDetails?id=${VerifierID}`
-    );
+    // const PriceData = await axios.get(
+    //   `${URL}/api/verifier/realEstate/getPrice?id=${VerifierID}`
+    // );
+    // const verifiedProperty = await axios.get(
+    //   `${URL}/api/verifier/realEstate/getPaymentDetails?id=${VerifierID}`
+    // );
 
     // Return the data as props
     return {
       props: {
         property: Property.data,
-        PriceData: PriceData.data,
-        verifProp: verifiedProperty.data,
+        PriceData: 0,
+        verifProp: 0,
         initialSearchTerm: context.query.searchTermInput || "",
         currentPage: parseInt(context.query.currentPage) || 1, // Parse currentPage to ensure it's a number
         role: RoleID,
@@ -65,7 +65,7 @@ export async function getServerSideProps(context) {
 const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
   // Get the router object
   const router = useRouter();
-
+  console.log(property)
   const [searchTerm, setSearchTerm] = useState("");
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -74,9 +74,7 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
 
   const TotalPendingProperties = property.filter(
     (product) =>
-      product.identityStatus === "pending" &&
-      product.propertyStatus === "pending" &&
-      product.documentStatus === "pending"
+      product.verificationStatus === "pending"
   );
 
   const [filteredProducts, setFilteredProducts] = useState(
@@ -107,8 +105,7 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
       const lowerCasedTerm = searchTerm.toLowerCase();
 
       return (
-        property.propertyName.toLowerCase().includes(lowerCasedTerm) ||
-        property.ownerName.toLowerCase().includes(lowerCasedTerm)
+        property.title.toLowerCase().includes(lowerCasedTerm)
       );
     });
 
@@ -225,18 +222,18 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
       ...(startPage > 1 ? [renderPageButton(1)] : []), // Show first page number
       ...(startPage > 2
         ? [
-            <span key="ellipsis-start" className="relative top-1">
-              ...
-            </span>,
-          ]
+          <span key="ellipsis-start" className="relative top-1">
+            ...
+          </span>,
+        ]
         : []),
       ...getRange(startPage, endPage).map(renderPageButton),
       ...(endPage < totalPages - 1
         ? [
-            <span key="ellipsis-end" className="relative top-1">
-              ...
-            </span>,
-          ]
+          <span key="ellipsis-end" className="relative top-1">
+            ...
+          </span>,
+        ]
         : []),
       ...(endPage < totalPages ? [renderPageButton(totalPages)] : []), // Show last page number
     ];
@@ -248,11 +245,10 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
     <button
       key={pageNumber}
       onClick={() => handlePageChange(pageNumber)}
-      className={`px-3 py-2 rounded-md ${
-        currentPage === pageNumber
-          ? " text-white border h-full bg11"
-          : "text-black h-auto hover:bg-gray-200"
-      }`}>
+      className={`px-3 py-2 rounded-md ${currentPage === pageNumber
+        ? " text-white border h-full bg11"
+        : "text-black h-auto hover:bg-gray-200"
+        }`}>
       {pageNumber}
     </button>
   );
@@ -291,6 +287,10 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
     }
   };
 
+  const renderProduct = async (productUrl) => {
+    window.open(productUrl, "_blank");
+  }
+
   // Initialize verificationTypes based on the role
   const initialVerificationTypes = property.map((product) => {
     if (role.includes("Identity Verifier")) {
@@ -314,31 +314,21 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
     setVerificationTypes(newVerificationTypes);
   };
 
-  const handleVerify = (propertyId, index) => {
-    const verificationType = verificationTypes[index];
-
-    // Conditionally redirect based on the verification type
-    if (verificationType === "Identity Verifier") {
-      router.push(`/Verifier/Property/Identity/${propertyId}`);
-    } else if (verificationType === "Property Verifier") {
-      router.push(`/Verifier/Property/Property/${propertyId}`);
-    } else if (verificationType === "Document Verifier") {
-      router.push(`/Verifier/Property/Document/${propertyId}`);
-    }
+  const handleVerify = (productId) => {
+    router.push(`/Verifier/Product/${productId}`);
   };
 
   return (
     <div
-      className={`bg-gray-50 flex flex-col ${
-        filteredAndPaginatedProducts.length > 3 ? "h-full" : "h-screen"
-      }`}>
+      className={`bg-gray-50 flex flex-col ${filteredAndPaginatedProducts.length > 3 ? "h-full" : "h-screen"
+        }`}>
       <VLayout>
         <div className="sm:ml-64 flex flex-col mt-20 gap-8">
           <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4 px-5">
             <div className="text-white rounded-md overflow-hidden shadow-lg p-4 bg11">
               <h4 className="text-base font-bold underline">Approved</h4>
               <div className="flex justify-between font-bold my-2">
-                {role.includes("Identity Verifier") && (
+                {/* {role.includes("Identity Verifier") && (
                   <div>
                     Identity:{" "}
                     <span className="font-bold text-green-500">
@@ -363,7 +353,7 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
                       {PriceData.totalVerifiedDocument}
                     </span>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
 
@@ -371,7 +361,7 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
               <h4 className="text-base font-bold text-black underline">
                 Rejected
               </h4>
-              <div className="flex justify-between font-bold my-2">
+              {/* <div className="flex justify-between font-bold my-2">
                 {role.includes("Identity Verifier") && (
                   <div>
                     Identity:{" "}
@@ -398,7 +388,7 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
                     </span>
                   </div>
                 )}
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -443,15 +433,13 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
               </form>
               <div>
                 <button
-                  className={`mt-2 font-medium text-black outline-none opacity-50 hover:opacity-80${
-                    isRotated ? " rotated" : ""
-                  }`}
+                  className={`mt-2 font-medium text-black outline-none opacity-50 hover:opacity-80${isRotated ? " rotated" : ""
+                    }`}
                   onClick={handleReset}
                   style={{ outline: "none" }}>
                   <svg
-                    className={`w-5 h-5 text-gray-800${
-                      isRotated ? " rotated" : ""
-                    }`}
+                    className={`w-5 h-5 text-gray-800${isRotated ? " rotated" : ""
+                      }`}
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -475,19 +463,13 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
                   <tr className="text-sm dark:bg-meta-4 text-left">
                     <th className="py-2 px-4 font-medium  text-black">No</th>
                     <th className="py-2 px-4 font-medium  text-black">
-                      Property Name
+                      Product Name
                     </th>
                     <th className="py-2 px-4 font-medium  text-black">Price</th>
                     <th className="py-2 px-4 font-medium  text-black">
-                      Seller Name
+                      View Product
                     </th>
-                    <th className="py-2 px-4 font-medium  text-black">
-                      Location
-                    </th>
-                    <th className="py-2 px-4 font-medium  text-black">Type</th>
-                    <th className="py-2 px-4 font-medium text-black">
-                      Verification Type
-                    </th>
+
                     <th className="py-2 px-4 font-medium text-black">Action</th>
                   </tr>
                 </thead>
@@ -504,154 +486,50 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
                         </td>
                         <td className="border-b border-gray-300 py-3 px-4">
                           <a
-                            // href={`http://verisilks.in:3000/description/${product.propertyName}/${product._id}`}
+                            // href={product?.productUrl}
                             target="_blank"
                             rel="noopener noreferrer">
                             <h5 className="text-sm text-black cursor-pointer hover:underline">
-                              {product.propertyName}
+                              {product?.title}
                             </h5>
                           </a>
                         </td>
                         <td className="border-b border-gray-300 py-3 px-4">
-                          <p className="text-sm text-black">{product.price}</p>
-                        </td>
-                        <td className="border-b border-gray-300 py-3 px-4">
-                          <p className="text-sm text-black">
-                            {product.ownerName}
+                          <p className="text-sm text-black"> ₹ {product?.variants?.length > 0 ? product.variants[0].price : 0}
                           </p>
                         </td>
+
                         <td
-                          className="border-b border-gray-300 py-3 px-4 "
-                          // onClick={() => renderLocation(product.location)}
-                        >
-                          <p className="text-sm text-black">
-                            {/* {product.location} */}
-                            {product.location
-                              ? product.location.substring(0, 20) +
-                                (product.location.length > 20 ? "..." : "")
-                              : "NA"}
-                          </p>
-                        </td>
-                        <td className="border-b border-gray-300 py-3 px-4 ">
-                          <p className="text-sm text-black">
-                            {product.propertyType}
-                          </p>
-                        </td>
-
-                        <td className="border-b border-gray-300 py-3 px-4">
-                          <div className="flex flex-col w-full bg15 md:w-48">
-                            <select
-                              id={`status_${index}`}
-                              className="mt-2 block w-full cursor-pointer rounded-md border border-gray-100 bg-gray-100 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                              onChange={(e) =>
-                                handleVerificationTypeChange(
-                                  index,
-                                  e.target.value
-                                )
-                              }
-                              value={verificationTypes[index]}
-                              disabled={
-                                !(
-                                  role.includes("Identity Verifier") &&
-                                  verificationTypes[index] !== "pending"
-                                ) &&
-                                !(
-                                  role.includes("Property Verifier") &&
-                                  verificationTypes[index] !== "pending"
-                                ) &&
-                                !(
-                                  role.includes("Document Verifier") &&
-                                  verificationTypes[index] !== "pending"
-                                )
-                              }>
-                              <option
-                                value="Identity Verifier"
-                                className={
-                                  product.identityStatus === "verified"
-                                    ? "text-green-500"
-                                    : product.identityStatus === "rejected"
-                                    ? "text-red-500"
-                                    : ""
-                                }
-                                disabled={!role.includes("Identity Verifier")}>
-                                {product.identityStatus === "verified"
-                                  ? "\u2713 "
-                                  : product.identityStatus === "rejected"
-                                  ? "\u2715 "
-                                  : ""}
-                                Identity Verification
-                              </option>
-                              <option
-                                value="Property Verifier"
-                                className={
-                                  product.propertyStatus === "verified"
-                                    ? "text-green-500"
-                                    : product.propertyStatus === "rejected"
-                                    ? "text-red-500"
-                                    : ""
-                                }
-                                disabled={!role.includes("Property Verifier")}>
-                                {product.propertyStatus === "verified"
-                                  ? "\u2713 "
-                                  : product.propertyStatus === "rejected"
-                                  ? "\u2715 "
-                                  : ""}
-                                Property Verification
-                              </option>
-                              <option
-                                value="Document Verifier"
-                                className={
-                                  product.documentStatus === "verified"
-                                    ? "text-green-500"
-                                    : product.documentStatus === "rejected"
-                                    ? "text-red-500"
-                                    : ""
-                                }
-                                disabled={!role.includes("Document Verifier")}>
-                                {product.documentStatus === "verified"
-                                  ? "\u2713 "
-                                  : product.documentStatus === "rejected"
-                                  ? "\u2715 "
-                                  : ""}
-                                Document Verification
-                              </option>
-                            </select>
-                          </div>
+                          className="px-6 py-4 text-gray-900 cursor-pointer items-center"
+                          onClick={() => renderProduct(product?.productUrl)}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="currentColor"
+                            className="w-6 h-6 bg18">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                            />
+                          </svg>
                         </td>
 
                         <td className="border-b border-gray-300 py-3 px-4">
-                          {verificationTypes[index] &&
-                          ((verificationTypes[index] === "Identity Verifier" &&
-                            (product.identityStatus === "verified" ||
-                              product.identityStatus === "rejected")) ||
-                            (verificationTypes[index] === "Property Verifier" &&
-                              (product.propertyStatus === "verified" ||
-                                product.propertyStatus === "rejected")) ||
-                            (verificationTypes[index] === "Document Verifier" &&
-                              (product.documentStatus === "verified" ||
-                                product.documentStatus === "rejected"))) ? (
-                            <p
-                              className={`inline-flex capitalize rounded-full px-3 py-1 text-center text-sm font-medium ${
-                                product.identityStatus === "verified" ||
-                                product.propertyStatus === "verified" ||
-                                product.documentStatus === "verified"
-                                  ? "text-green-700 bg-green-100"
-                                  : "text-red-700 bg-red-100"
-                              }`}>
-                              {product.identityStatus === "verified" ||
-                              product.propertyStatus === "verified" ||
-                              product.documentStatus === "verified"
-                                ? "Verified"
-                                : "Rejected"}
-                            </p>
-                          ) : (
-                            <button
-                              type="button"
-                              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  focus:outline-none"
-                              onClick={() => handleVerify(product._id, index)}>
-                              Verify
-                            </button>
-                          )}
+                          <button
+                            type="button"
+                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2  focus:outline-none"
+                            onClick={() => handleVerify(product._id)}>
+                            Verify
+                          </button>
+
                         </td>
                       </tr>
                     ))
@@ -660,7 +538,7 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
                       <td
                         colSpan="6"
                         className="px-6 py-4 text-gray-900 text-center font-semibold">
-                        No Properties Available
+                        No Products Available
                       </td>
                     </tr>
                   )}
@@ -679,11 +557,10 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
                 <div className="flex space-x-2 mt-2 rounded-md overflow-hidden border-2 border-[#D5D9D9] shadow-sm">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
-                    className={`relative flex items-center px-2 py-2 ${
-                      currentPage === 1
-                        ? "text-[#5B5C5C] cursor-not-allowed"
-                        : "text-black hover:bg-gray-200 hover:border-[#F5F6F6]"
-                    } transition-all`}
+                    className={`relative flex items-center px-2 py-2 ${currentPage === 1
+                      ? "text-[#5B5C5C] cursor-not-allowed"
+                      : "text-black hover:bg-gray-200 hover:border-[#F5F6F6]"
+                      } transition-all`}
                     style={{
                       cursor: currentPage === 1 ? "not-allowed" : "pointer",
                     }}
@@ -707,11 +584,10 @@ const Dashboard = ({ property, initialSearchTerm, role, PriceData }) => {
                   {renderPageNumbers()}
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
-                    className={`relative flex items-center px-2 py-2 ${
-                      currentPage === totalPages
-                        ? "text-[#5B5C5C] cursor-not-allowed"
-                        : "text-black hover:bg-gray-200 hover:border-[#F5F6F6]"
-                    } transition-all`}
+                    className={`relative flex items-center px-2 py-2 ${currentPage === totalPages
+                      ? "text-[#5B5C5C] cursor-not-allowed"
+                      : "text-black hover:bg-gray-200 hover:border-[#F5F6F6]"
+                      } transition-all`}
                     style={{
                       cursor:
                         currentPage === totalPages ? "not-allowed" : "pointer",

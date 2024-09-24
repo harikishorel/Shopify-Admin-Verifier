@@ -245,7 +245,7 @@ const Property = ({ property, role, verifiedProd }) => {
     <div className={`bg-gray-50 flex flex-col h-screen`}>
       <VLayout>
         <div className="sm:ml-64 flex flex-col mt-20 gap-6">
-          <h1 className="font-medium text-2xl ml-6">Properties</h1>
+          <h1 className="font-medium text-2xl ml-6">Products</h1>
 
           <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between gap-1 px-8">
             <div className="flex flex-column gap-2">
@@ -255,7 +255,7 @@ const Property = ({ property, role, verifiedProd }) => {
                     className="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                     // type="search"
                     name="search"
-                    placeholder="Search for property"
+                    placeholder="Search for product"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
@@ -328,7 +328,7 @@ const Property = ({ property, role, verifiedProd }) => {
                     <tr className="text-sm dark:bg-meta-4 text-left">
                       <th className="py-2 px-4 font-medium  text-black">No</th>
                       <th className="py-2 px-4 font-medium  text-black">
-                        Property Name
+                        Product Name
                       </th>
                       <th className="py-2 px-4 font-medium  text-black">
                         Price
@@ -336,7 +336,7 @@ const Property = ({ property, role, verifiedProd }) => {
                       <th className="py-2 px-4 font-medium  text-black">
                         Seller Name
                       </th>
-                      <th className="py-2 px-4 font-medium  text-black">
+                      {/* <th className="py-2 px-4 font-medium  text-black">
                         Location
                       </th>
                       <th className="py-2 px-4 font-medium  text-black">
@@ -344,7 +344,7 @@ const Property = ({ property, role, verifiedProd }) => {
                       </th>
                       <th className="py-2 px-4 font-medium text-black">
                         Verification Type
-                      </th>
+                      </th> */}
                       <th className="py-2 px-4 font-medium text-black">
                         Action
                       </th>
@@ -381,25 +381,25 @@ const Property = ({ property, role, verifiedProd }) => {
                               {product.ownerName}
                             </p>
                           </td>
-                          <td
+                          {/* <td
                             className="border-b border-gray-300 py-3 px-4 "
                             // onClick={() => renderLocation(product.location)}
                           >
                             <p className="text-sm text-black">
-                              {/* {product.location} */}
+                              {/* {product.location} 
                               {product.location
                                 ? product.location.substring(0, 20) +
                                   (product.location.length > 20 ? "..." : "")
                                 : "NA"}
                             </p>
-                          </td>
-                          <td className="border-b border-gray-300 py-3 px-4 ">
+                          </td> */}
+                          {/* <td className="border-b border-gray-300 py-3 px-4 ">
                             <p className="text-sm text-black">
                               {product.propertyType}
                             </p>
-                          </td>
+                          </td> */}
 
-                          <td className="border-b border-gray-300 py-3 px-4">
+                          {/* <td className="border-b border-gray-300 py-3 px-4">
                             <div className="flex flex-col w-full bg15 md:w-48">
                               <select
                                 id={`status_${index}`}
@@ -484,7 +484,7 @@ const Property = ({ property, role, verifiedProd }) => {
                                 </option>
                               </select>
                             </div>
-                          </td>
+                          </td> */}
 
                           <td className="border-b border-gray-300 py-3 px-4">
                             {verificationTypes[index] &&
@@ -532,7 +532,7 @@ const Property = ({ property, role, verifiedProd }) => {
                         <td
                           colSpan="6"
                           className="px-6 py-4 text-gray-900 text-center font-semibold">
-                          No Properties Available
+                          No Products Available
                         </td>
                       </tr>
                     )}
@@ -669,7 +669,7 @@ const Property = ({ property, role, verifiedProd }) => {
                         <td
                           colSpan="6"
                           className="px-6 py-4 text-gray-900 text-center font-semibold">
-                          No Properties Available
+                          No Products Available
                         </td>
                       </tr>
                     )}

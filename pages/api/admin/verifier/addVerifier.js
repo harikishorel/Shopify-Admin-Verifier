@@ -49,11 +49,8 @@ export default async function handler(req, res) {
             phone,
             idProof,
             address,
-            verifiertype,
           } = fields;
-          console.log("typeee", verifiertype);
-          const verifierTypesArray = verifiertype[0].split(",");
-
+         
           // Step 1: Save the Verifier into the database and retrieve the _id
           const newVerifier = new Verifier({
             name: name[0],
@@ -62,7 +59,6 @@ export default async function handler(req, res) {
             phone: phone[0],
             idProof: idProof[0],
             address: address[0],
-            verifiertype: verifierTypesArray,
           });
 
           const savedVerifier = await newVerifier.save();
@@ -77,7 +73,7 @@ export default async function handler(req, res) {
             },
           });
 
-          const adminFolderKey = `realEstate/${verifierId}/`;
+          const adminFolderKey = `shopify/${verifierId}/`;
           const createFolderParams = {
             Bucket: process.env.BUCKET_NAME, // Replace with your actual bucket name
             Key: adminFolderKey,

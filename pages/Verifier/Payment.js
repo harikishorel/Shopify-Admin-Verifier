@@ -304,7 +304,7 @@ const Payment = ({
             {/* Card 1 */}
             <div className="text-white rounded-md overflow-hidden shadow-lg p-4 bg11">
               <h4 className="text-base font-bold mb-1.5">
-                Total Verified Properties
+                Total Verified Products
               </h4>
               <h2 className="text-2xl font-bold mb-1.5">{TotalProducts}</h2>
             </div>

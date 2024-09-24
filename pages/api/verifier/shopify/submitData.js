@@ -13,7 +13,6 @@ export default async function handler(req, res) {
     if (req.method === "POST") {
         const ClientID = process.env.WEB3CLIENTID;
         const SigningPrivateKey = process.env.SIGN_PRIVATEKEY;
-        const qrUrl = process.env.QR_URL
         try {
             // Create a dynamic blockJSON using data from the form
 

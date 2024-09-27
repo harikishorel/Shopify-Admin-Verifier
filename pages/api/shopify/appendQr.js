@@ -57,25 +57,25 @@ export default async function handler(req, res) {
 
                     try {
                         // Update the verificationStatus metafield to "verified"
-                        const updateVerificationStatusResponse = await axios.put(
-                            `https://${shopUrl}/admin/api/2023-07/products/${productId}/metafields.json`,
-                            {
-                                metafield: {
-                                    namespace: "verification",
-                                    key: "verificationStatus",
-                                    value: "verified",
-                                    type: "single_line_text_field",
-                                },
-                            },
-                            {
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    "X-Shopify-Access-Token": accessToken,
-                                },
-                            }
-                        );
+                        // const updateVerificationStatusResponse = await axios.put(
+                        //     `https://${shopUrl}/admin/api/2023-07/products/${productId}/metafields.json`,
+                        //     {
+                        //         metafield: {
+                        //             namespace: "verification",
+                        //             key: "verificationStatus",
+                        //             value: "verified",
+                        //             type: "single_line_text_field",
+                        //         },
+                        //     },
+                        //     {
+                        //         headers: {
+                        //             "Content-Type": "application/json",
+                        //             "X-Shopify-Access-Token": accessToken,
+                        //         },
+                        //     }
+                        // );
 
-                        console.log(`Updated verificationStatus for product ${productId}:`, updateVerificationStatusResponse.data);
+                        // console.log(`Updated verificationStatus for product ${productId}:`, updateVerificationStatusResponse.data);
 
                         // Add the new qrUrl metafield
                         const qrCodeUrl = `${qrUrl}/trace/${mongoDbId}`; // Replace with actual QR URL generation logic
